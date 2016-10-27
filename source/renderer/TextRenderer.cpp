@@ -1,5 +1,4 @@
 #include <cstring>
-#include <malloc.h>
 #include <epoxy/gl.h>
 #include <radix/renderer/TextRenderer.hpp>
 #include <radix/renderer/Renderer.hpp>
