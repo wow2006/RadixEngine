@@ -70,7 +70,7 @@ void Util::SetThreadName(std::thread &thread, const char *name) {
   DWORD threadId = ::GetThreadId(static_cast<HANDLE>(thread->native_handle()));
   SetThreadName(threadId,threadName);
 }
-#elif MACOSX
+#elif __APPLE__
 void Util::SetThreadName(std::thread &thread, const char *name) {
   pthread_setname_np(name);
 }
