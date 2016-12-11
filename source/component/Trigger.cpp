@@ -3,20 +3,19 @@
 
 namespace radix {
 
-Trigger::Trigger(Entity &ent, Action actionOnEnter, Action actionOnExit,
-                 Action actionOnMove, Action actionOnUpdate)
+Trigger::Trigger(Entity &ent)
   : Component(ent),
-  actionOnEnter(actionOnEnter),
-  actionOnExit(actionOnExit),
-  actionOnMove(actionOnMove),
-  actionOnUpdate(actionOnUpdate) {
-  obj = new btGhostObject;
+  actionOnEnter([] (BaseGame* game) {}),
+  actionOnExit([] (BaseGame* game) {}),
+  actionOnMove([] (BaseGame* game) {}),
+  actionOnUpdate([] (BaseGame* game) {}) {
+  ghostObject = new btGhostObject;
   Transform& tform = entity.getComponent<Transform>();
-  obj->setWorldTransform(btTransform(tform.getOrientation(), tform.getPosition()));
+  ghostObject->setWorldTransform(btTransform(tform.getOrientation(), tform.getPosition()));
   shape = std::make_shared<btCapsuleShape>(.4, 1);
-  obj->setCollisionShape(shape.get());
-  obj->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
-  obj->setUserPointer(&entity);
+  ghostObject->setCollisionShape(shape.get());
+  ghostObject->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+  ghostObject->setUserPointer(&entity);
 
   callbackOnEnter = entity.manager.world.event.addObserver(PhysicsSystem::
                                                            CollisionAddedEvent::Type,
@@ -24,7 +23,7 @@ Trigger::Trigger(Entity &ent, Action actionOnEnter, Action actionOnExit,
     PhysicsSystem::CollisionAddedEvent& collisionAddedEvent
       = (PhysicsSystem::CollisionAddedEvent&) event;
 
-    if (collisionAddedEvent.info.body1 == this->obj) {
+    if (collisionAddedEvent.info.body1 == this->ghostObject) {
       this->actionOnEnter(collisionAddedEvent.game);
     }
   });
@@ -34,14 +33,34 @@ Trigger::Trigger(Entity &ent, Action actionOnEnter, Action actionOnExit,
     PhysicsSystem::CollisionRemovedEvent& collisionRemovedEvent
       = (PhysicsSystem::CollisionRemovedEvent&) event;
 
-    if (collisionRemovedEvent.info.body1 == this->obj) {
+    if (collisionRemovedEvent.info.body1 == this->ghostObject) {
       this->actionOnExit(collisionRemovedEvent.game);
     }
   });
 }
 
+btGhostObject *Trigger::getBulletGhostObject(){
+  return ghostObject;
+}
+
+void Trigger::setActionOnEnter(Action action){
+  actionOnEnter = action;
+}
+
+void Trigger::setActionOnMove(Action action){
+  actionOnMove = action;
+}
+
+void Trigger::setActionOnUpdate(Action action){
+  actionOnUpdate = action;
+}
+
+void Trigger::setActionOnExit(Action action){
+  actionOnExit = action;
+}
+
 Trigger::~Trigger() {
-  delete obj;
+  delete ghostObject;
 }
 
 } /* namespace radix */
