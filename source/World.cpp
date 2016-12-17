@@ -38,11 +38,17 @@ void World::setConfig(radix::Config &config){
   this->config = config;
 }
 
-radix::Config &World::getConfig(){
+radix::Config& World::getConfig(){
   return this->config;
 }
 
+void World::setCamera(Camera *camera) {
+  this->camera = camera;
+}
 
+Camera& World::getCamera() {
+  return *this->camera;
+}
 
 void World::create() {
   lastUpdateTime = SDL_GetTicks();

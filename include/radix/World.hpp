@@ -39,7 +39,9 @@ public:
   InputSource &input;
   World(InputSource &input);
   void setConfig(radix::Config &config);
-  radix::Config &getConfig();
+  radix::Config& getConfig();
+  void setCamera(Camera *camera);
+  Camera& getCamera();
   ~World();
   void create();
   void destroy();
@@ -51,7 +53,7 @@ public:
 
   Entity& getPlayer();
 
-  Camera camera;
+  Camera* camera;
   std::map<int, Material> materials;
 
   EventDispatcher event;

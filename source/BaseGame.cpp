@@ -38,6 +38,7 @@ void BaseGame::setup() {
   world.create();
   renderer = std::make_unique<Renderer>(world);
   camera = std::make_unique<Camera>();
+  world.setCamera(camera.get());
   SystemManager::Transaction systemTransaction = world.systems.transact();
   systemTransaction.addSystem<PlayerSystem>(this);
   systemTransaction.addSystem<PhysicsSystem>(this);
