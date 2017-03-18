@@ -19,7 +19,7 @@ namespace radix {
     std::string fileName = this->filePath;
     action = [fileName] (BaseGame &game) {
       XmlMapLoader mapLoader(*game.getWorld(), game.getCustomTriggers());
-      mapLoader.load(Environment::getDataDir() + "maps/" + fileName);
+      mapLoader.load(Environment::getDataDir() + "/maps/" + fileName);
     };
 
     trigger.getComponent<Trigger>().setActionOnEnter(action);
