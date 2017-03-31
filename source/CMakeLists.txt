@@ -25,11 +25,10 @@ set(RADIX_SOURCES
   ${D}/env/Environment.cpp
   ${D}/env/OperatingSystem.cpp
   ${D}/env/Util.cpp
-  PARENT_SCOPE
 )
 
 # For OpenGL games
-if (NOT ${RADIX_GRAPHICS_DISABLED} MATCHES 1)
+if (NOT RADIX_GRAPHICS_DISABLED)
   set(RADIX_SOURCES
     ${RADIX_SOURCES}
     ${D}/BaseGame.cpp
@@ -92,6 +91,10 @@ if (NOT ${RADIX_GRAPHICS_DISABLED} MATCHES 1)
     ${D}/util/XmlLoader.cpp
     ${D}/Window.cpp
     ${D}/World.cpp
-    PARENT_SCOPE
     )
 endif()
+
+set(RADIX_SOURCES
+  ${RADIX_SOURCES}
+  PARENT_SCOPE
+)
